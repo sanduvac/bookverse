@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  monolith-app:
+    build: ./single-file-monolith
+    ports:
+      - "8080:8080"
+    networks:
+      - bookverse-net
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "8081:8081"
+    networks:
+      - bookverse-net
+
+networks:
+  bookverse-net:
+    driver: bridge
