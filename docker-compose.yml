@@ -1,9 +1,18 @@
-version: '3.8'
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"   # Uygulamaların konuşma portu
+      - "15672:15672" # Senin tarayıcıdan izleme portun
+    networks:
+      - bookverse-net
+
   monolith-app:
     build: ./single-file-monolith
     ports:
       - "8080:8080"
+    depends_on:
+      - rabbitmq
     networks:
       - bookverse-net
 
@@ -11,6 +20,16 @@ services:
     build: ./user-service
     ports:
       - "8081:8081"
+    networks:
+      - bookverse-net
+
+  # Yeni ekleyeceğimiz servis (Şimdilik yerini hazırladık)
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - rabbitmq
     networks:
       - bookverse-net
 
